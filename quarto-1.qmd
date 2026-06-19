@@ -4,3 +4,81 @@ author: Isabella Hua
 format: html
 ---
 
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(palmerpenguins)
+```
+
+```{r}
+#| echo: false
+library(tidyverse)
+library(palmerpenguins)
+
+# Clean data
+penguins_clean <- penguins %>%
+  drop_na(bill_length_mm, bill_depth_mm, species, island)
+
+# Custom palette
+penguin_colors <- c(
+  "Adelie" = "#1B9E77",
+  "Chinstrap" = "#D95F02",
+  "Gentoo" = "#7570B3"
+)
+
+# Create plot
+ggplot(
+  penguins_clean,
+  aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+) +
+  geom_point(
+    size = 3,
+    alpha = 0.8
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    linewidth = 1
+  ) +
+  facet_wrap(~ island) +
+  scale_color_manual(values = penguin_colors) +
+  labs(
+    title = "Penguin Beak Morphology Across Islands",
+    subtitle = "Bill length and bill depth vary substantially by species",
+    x = "Bill Length (mm)",
+    y = "Bill Depth (mm)",
+    color = "Species",
+    caption = "Data: Palmer Penguins"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(
+      size = 22,
+      face = "bold",
+      color = "#222222"
+    ),
+    plot.subtitle = element_text(
+      size = 12,
+      color = "#555555"
+    ),
+    strip.text = element_text(
+      face = "bold",
+      size = 11
+    ),
+    legend.position = "top",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(
+      color = "grey90",
+      linewidth = 0.3
+    ),
+    plot.background = element_rect(
+      fill = "#FCFCFC",
+      color = NA
+    )
+  )
+```
